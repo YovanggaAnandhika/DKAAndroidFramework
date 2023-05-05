@@ -5,16 +5,16 @@ plugins {
     id 'signing'
 }
 
-group = "com.dkaresearchcenter.dkaframework"
-version = "1.0.5"
+group = PUBLISH_GROUP_ID
+version = PUBLISH_VERSION
 
 android {
     namespace 'com.dkaresearchcenter.dkaframework'
     compileSdk 33
 
     publishing {
-        singleVariant('release') {
-            withSourcesJar()
+        multipleVariants {
+            allVariants()
             withJavadocJar()
         }
         // ...
@@ -93,9 +93,37 @@ afterEvaluate {
                 artifactId = 'core'
                 version = '1.0.0.5'
 
+                pom {
+                    name = rootProject.ext["PUBLISH_ARTIFACT_ID"]
+                    description = 'DKA Framework Multifunction'
+                    url = 'https://github.com/YovanggaAnandhika/DKAAndroidFramework'
+                    licenses {
+                        license {
+                            name = 'MIT LICENCE'
+                            url = 'https://github.com/YovanggaAnandhika/DKAAndroidFramework/blob/master/LICENCE.md'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'yovangga'
+                            name = 'yovanggaanandhika'
+                            email = 'dhikaprivate@gmail.com'
+                        }
+                        // Add all other devs here...
+                    }
+
+                    // Version control info - if you're using GitHub, follow the
+                    // format as seen here
+                    scm {
+                        connection = 'scm:git:github.com/YovanggaAnandhika/DKAAndroidFramework.git'
+                        developerConnection = 'scm:git:ssh://github.com/YovanggaAnandhika/DKAAndroidFramework.git'
+                        url = 'https://github.com/YovanggaAnandhika/DKAAndroidFramework/tree/master'
+                    }
+                }
+
                 //println("test " + publishing.publications[0])
             }
-            println("Components: " + components*.name)
+            //println("Components: " + components*.name)
         }
     }
     signing {
@@ -120,9 +148,10 @@ nexusPublishing {
             snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
             username = ossrhUsername
             password = ossrhPassword
-            //stagingProfileId = sonatypeStagingProfileId
+            stagingProfileId = rootProject.ext["sonatypeStagingProfileId"]
         }
     }
+
 }
 
 /*nexusStaging {
